@@ -1,1 +1,21 @@
+-----------------------
+GOAL
+-----------------------
+- Determine whether to send a direct mail piece to a customer using a large set of anonymized features
+- Type: prediction
 
+-----------------------
+DATASET
+-----------------------
+- 921 Mb csv
+- high-dimensional (1934 features)
+- anonymized
+- response variable: labeled "target", binary 
+- continuous and categorical features
+- "placeholder" values exist (to represent cases such as missing values)
+
+-----------------------
+LINKS
+-----------------------
+- Mainpage: https://www.kaggle.com/c/springleaf-marketing-response
+- Dataset: https://www.kaggle.com/c/springleaf-marketing-response/data
