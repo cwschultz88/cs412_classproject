@@ -148,7 +148,7 @@ def splitDataset(dataset, splitRatio):
 featureAccuracy = dict()
 
 def eachFeatureMain():
-    dataFile = 'train.csv'
+    dataFile = 'example.csv'
 
     print '%s Loading and pre-processing data...' % INFO 
     data = loadCsv(dataFile)
@@ -190,8 +190,8 @@ def eachFeatureMain():
     # Iterate through each feature
     for i in range(1,featureSize):
         print '%s Feature %d...' % (INFO, i+1)
-        trainX = train[:,i-1:i]
-        testX = test[:,i-1:i]
+        trainX = train[:,i:i+1]
+        testX = test[:,i:i+1]
         
         print '    %s Fitting Naive Bayes classifier...' % INFO 
         clf = MultinomialNB().fit(trainX, trainy)
