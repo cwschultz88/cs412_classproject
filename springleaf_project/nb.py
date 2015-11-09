@@ -14,12 +14,13 @@ import csv
 import random
 import numpy as np
 from sklearn.naive_bayes import MultinomialNB
+import operator
 #==============================================================================
 # Global variables
 #==============================================================================
 INFO = '[INFO]'
 DEBUG = '[DEBUG]'
-
+RESULT= '[RESULT]'
 
 def loadCsv(fname):
     lines = csv.reader(open(fname, "rU"),delimiter=",")
@@ -38,6 +39,7 @@ def preprocessData(data):
         colArray = data[:,col]
         d = dict() # to hold {string,intID} map
         row = 0
+        
 #==============================================================================
 #        numID:
 #        used to map an int identifier to each distinct string value; 
@@ -52,6 +54,7 @@ def preprocessData(data):
                 if element < 0:
                     element = abs(element)
                 newData[row,col] = element
+                #print element
             elif isLong(element):
                 element = long(element)
                 newData[row,col] = element
@@ -141,11 +144,82 @@ def splitDataset(dataset, splitRatio):
         trainSet.append(copy.pop(index))
     return [trainSet, copy]
 
+
+featureAccuracy = dict()
+
+def eachFeatureMain():
+    dataFile = 'train.csv'
+
+    print '%s Loading and pre-processing data...' % INFO 
+    data = loadCsv(dataFile)
+#    print '%s Original training data:' % DEBUG
+    data = preprocessData(data)
+#    print '%s Pre-processed training data:' % DEBUG
+#    print data
+
+    # Split the data into training and testing    
+    splitRatio = 0.80
+    train, test = splitDataset(data, splitRatio)
+    train = np.asarray(train)
+    test = np.asarray(test)
+
+    trainy = train[:,-1]
+    testy = test[:,-1]
+    
+    print '%s Feature 1...' % (INFO)
+    trainX = train[:,:1]
+    testX = test[:,:1]
+        
+    print '    %s Fitting Naive Bayes classifier...' % INFO 
+    clf = MultinomialNB().fit(trainX, trainy)
+    print '    %s Making predictions...' % INFO 
+        # for testing
+    #    prediction = clf.predict(trainX)
+    prediction = clf.predict(testX)
+    #print '    [RESULT] the prediction is: '    
+    #print prediction
+    print '    %s Calcualting prediction accuracy...' % INFO 
+        # for testing
+    #    accuracy = np.mean(prediction == trainy) 
+    accuracy = np.mean(prediction == testy)  
+    print '    [RESULT] accuracy = %f' % accuracy    
+    featureAccuracy[0] = accuracy
+    
+    
+    featureSize = int(data.shape[1])-1
+    # Iterate through each feature
+    for i in range(1,featureSize):
+        print '%s Feature %d...' % (INFO, i+1)
+        trainX = train[:,i-1:i]
+        testX = test[:,i-1:i]
+        
+        print '    %s Fitting Naive Bayes classifier...' % INFO 
+        clf = MultinomialNB().fit(trainX, trainy)
+        print '    %s Making predictions...' % INFO 
+        # for testing
+    #    prediction = clf.predict(trainX)
+        prediction = clf.predict(testX)
+        #print '    [RESULT] the prediction is: '    
+        #print prediction
+        print '    %s Calcualting prediction accuracy...' % INFO 
+        # for testing
+    #    accuracy = np.mean(prediction == trainy) 
+        accuracy = np.mean(prediction == testy)  
+        print '    [RESULT] accuracy = %f' % accuracy
+        featureAccuracy[i] = accuracy
+    
+    #print featureAccuracy
+    # sort by accuracy
+    sorted_featureAccuracy = sorted(featureAccuracy.items(), key=operator.itemgetter(1),reverse=True)
+
+    print ''
+    print '%s Final sorted result in format (FeatureID-1, Accuracy):' % RESULT
+    print sorted_featureAccuracy
     
 def main():
 #    trainFile = 'train.csv'    
 #    testFile = 'test.csv'
-    dataFile = 'train.csv'
+    dataFile = 'example.train.csv'
 
 
 #    print '%s Loading and pre-processing training data...' % INFO 
@@ -166,7 +240,6 @@ def main():
     print '%s Loading and pre-processing data...' % INFO 
     data = loadCsv(dataFile)
 #    print '%s Original training data:' % DEBUG
-#    print data
     data = preprocessData(data)
 #    print '%s Pre-processed training data:' % DEBUG
 #    print data
@@ -214,8 +287,10 @@ def main():
 #    print('Separated instances: {0}').format(separated)
     
 #    print dataarray[:,0] #access the first column
-main()
-
+    
+    
+#main()
+eachFeatureMain()
 
 #==============================================================================
 # Testing code
