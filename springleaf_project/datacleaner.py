@@ -6,7 +6,7 @@ class DataCleaner(Object):
     Interface for data cleaner classes
 
     Data cleaner classes must extend this class to ensure a proper
-    interface if used.
+    interface is used.
 
     Concrete implementations of this class must implement the
     static method clean()
