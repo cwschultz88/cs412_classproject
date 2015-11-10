@@ -12,7 +12,7 @@ class DataCleaner(Object):
     static method clean()
 
     E.x.
-    class DataCleanerChris(Data):
+    class DataCleanerChris(DataCleaner):
         ...
         @staticmethod
         def preprocess():
