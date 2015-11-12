@@ -12,7 +12,7 @@ def main():
     in_filename = 'train.csv'
     out_filename = 'sample.csv'
     nlinesfile = 145232
-    nlinesrandomsample = 10001
+    nlinesrandomsample = 10000
 #    nlinesfile = 6
 #    nlinesrandomsample = 3
     lines2skip = np.random.choice(np.arange(1,nlinesfile+1), (nlinesfile-nlinesrandomsample), replace=False)

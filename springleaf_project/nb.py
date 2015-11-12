@@ -148,7 +148,7 @@ def splitDataset(dataset, splitRatio):
 featureAccuracy = dict()
 
 def eachFeatureMain():
-    dataFile = 'example.csv'
+    dataFile = 'example1.csv'
 
     print '%s Loading and pre-processing data...' % INFO 
     data = loadCsv(dataFile)
@@ -167,17 +167,19 @@ def eachFeatureMain():
     testy = test[:,-1]
     
     print '%s Feature 1...' % (INFO)
-    trainX = train[:,:1]
-    testX = test[:,:1]
+    trainX1 = train[:,:1]
+    testX1 = test[:,:1]
         
     print '    %s Fitting Naive Bayes classifier...' % INFO 
-    clf = MultinomialNB().fit(trainX, trainy)
+    clf = MultinomialNB().fit(trainX1, trainy)
     print '    %s Making predictions...' % INFO 
         # for testing
     #    prediction = clf.predict(trainX)
-    prediction = clf.predict(testX)
-    #print '    [RESULT] the prediction is: '    
-    #print prediction
+    prediction = clf.predict(testX1)
+#    print '    [RESULT] the prediction is: '    
+#    print prediction
+#    print '    [RESULT] correct prediction should be: '
+#    print testy
     print '    %s Calcualting prediction accuracy...' % INFO 
         # for testing
     #    accuracy = np.mean(prediction == trainy) 
@@ -191,7 +193,10 @@ def eachFeatureMain():
     for i in range(1,featureSize):
         print '%s Feature %d...' % (INFO, i+1)
         trainX = train[:,i:i+1]
+#        print trainX
+#        print trainy
         testX = test[:,i:i+1]
+#        print testX
         
         print '    %s Fitting Naive Bayes classifier...' % INFO 
         clf = MultinomialNB().fit(trainX, trainy)
@@ -199,8 +204,10 @@ def eachFeatureMain():
         # for testing
     #    prediction = clf.predict(trainX)
         prediction = clf.predict(testX)
-        #print '    [RESULT] the prediction is: '    
-        #print prediction
+#        print '    [RESULT] the prediction is: '    
+#        print prediction
+#        print '    [RESULT] correct prediction should be: '
+#        print testy
         print '    %s Calcualting prediction accuracy...' % INFO 
         # for testing
     #    accuracy = np.mean(prediction == trainy) 
@@ -208,14 +215,25 @@ def eachFeatureMain():
         print '    [RESULT] accuracy = %f' % accuracy
         featureAccuracy[i] = accuracy
     
-    #print featureAccuracy
     # sort by accuracy
     sorted_featureAccuracy = sorted(featureAccuracy.items(), key=operator.itemgetter(1),reverse=True)
 
     print ''
     print '%s Final sorted result in format (FeatureID-1, Accuracy):' % RESULT
     print sorted_featureAccuracy
+    print ''
     
+    # stats
+    print '%s Statistics of the accuracy results: ' % RESULT
+    accuracies = np.fromiter(iter(featureAccuracy.values()), dtype=float)
+    print("Mean : {0:8.6f}".format(accuracies.mean()))
+    print("Minimum : {0:8.6f}".format(accuracies.min()))
+    print("Maximum : {0:8.6f}".format(accuracies.max()))
+    print("Variance : {0:8.6f}".format(accuracies.var()))
+    print("Std. deviation : {0:8.6f}".format(accuracies.std()))
+    
+eachFeatureMain()
+
 def main():
 #    trainFile = 'train.csv'    
 #    testFile = 'test.csv'
@@ -290,7 +308,6 @@ def main():
     
     
 #main()
-eachFeatureMain()
 
 #==============================================================================
 # Testing code
