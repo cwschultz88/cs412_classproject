@@ -1,7 +1,6 @@
-import ABC
+from abc import ABCMeta, abstractmethod
 
-
-class DataCleaner(Object):
+class DataCleaner():
     '''
     Interface for data cleaner classes
 
@@ -19,9 +18,9 @@ class DataCleaner(Object):
             ...
             return numpy_array
     '''
-    __metaclass__ = abc.ABCMeta
+    __metaclass__ = ABCMeta
 
-    @abc.abstractmethod
+    @abstractmethod
     def clean(numpy_feature_array):
         '''
         Concrete implementations must implement this as a @staticmethod
