@@ -26,7 +26,7 @@ class DataCleanerShiwangi(DataCleaner):
 
         ###### normalize data between [0,1] using X_norm= (X - Xmin)/ (Xmax - Xmin)
         df_norm= (df - df.min()) / (df.max()-df.min())
-        #df_norm=df_norm.fillna(-1)
+        df_norm=df_norm.fillna(-1)
 
         ##### generate normalized csv 
         #df_norm.to_csv('normalized_data.csv',sep=',', index=False)
